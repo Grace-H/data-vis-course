@@ -12,6 +12,11 @@ export default function App() {
   const eyeRadius = 50;
   const mouthRadius = 120;
   const mouthWidth = 20;
+  const noseArc = arc()
+    .innerRadius(mouthWidth)
+    .outerRadius(40)
+    .startAngle(-Math.PI / 2)
+    .endAngle(Math.PI / 2);
 
   const mouthArc = arc()
     .innerRadius(mouthRadius)
@@ -23,14 +28,35 @@ export default function App() {
     <svg width={width} height={height}>
       <g transform={`translate(${centerX},${centerY})`}>
         {/*group element*/}
-        <circle
-          r={height / 2 - strokeWidth / 2}
-          fill="yellow"
-          stroke="black"
+        <polygon
+          points="-200,-200 190,-170 190,-80 240,198 -240,198 -170,78"
+          fill="green"
+          stroke="purple"
           stroke-width={strokeWidth}
         />
         <circle cx={-eyeOffsetX} cy={-eyeOffsetY} r={eyeRadius} />
         <circle cx={eyeOffsetX} cy={-eyeOffsetY} r={eyeRadius} />
+        <circle
+          cx={-eyeOffsetX}
+          cy={-eyeOffsetY}
+          r={(2 * eyeRadius) / 5}
+          fill="grey"
+        />
+        <circle
+          cx={eyeOffsetX}
+          cy={-eyeOffsetY}
+          r={(2 * eyeRadius) / 5}
+          fill="grey"
+        />
+        <path
+          d={noseArc()}
+          transform={`translate(${mouthRadius},-${mouthRadius + 40})`}
+        ></path>
+        <path
+          d={noseArc()}
+          transform={`translate(-${mouthRadius},-${mouthRadius + 40})`}
+        ></path>
+        <path d={noseArc()} transform={`translate(0,20)`}></path>
         <path d={mouthArc()}></path>
       </g>
     </svg>
