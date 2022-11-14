@@ -28,12 +28,7 @@ export default function App() {
     <svg width={width} height={height}>
       <g transform={`translate(${centerX},${centerY})`}>
         {/*group element*/}
-        <polygon
-          points="-200,-200 190,-170 190,-80 240,198 -240,198 -170,78"
-          fill="green"
-          stroke="purple"
-          stroke-width={strokeWidth}
-        />
+        <BackgroundShape strokeWidth={strokeWidth} />
         <circle cx={-eyeOffsetX} cy={-eyeOffsetY} r={eyeRadius} />
         <circle cx={eyeOffsetX} cy={-eyeOffsetY} r={eyeRadius} />
         <circle
@@ -60,5 +55,16 @@ export default function App() {
         <path d={mouthArc()}></path>
       </g>
     </svg>
+  );
+}
+
+function BackgroundShape({ strokeWidth }) {
+  return (
+    <polygon
+      points="-200,-200 190,-170 190,-80 240,198 -240,198 -170,78"
+      fill="green"
+      stroke="purple"
+      stroke-width={strokeWidth}
+    />
   );
 }
