@@ -1,37 +1,30 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect } from "react";
-import { csvParse } from "d3";
+import { useEffect, useState } from "react";
+import { csv, csvFormat } from "d3";
 
 export default function App() {
+  const [data, setData] = useState(null);
+
   const csvURL =
     "https://gist.githubusercontent.com/Grace-H/6fa383b8274ae4de60bd9a2638455854/raw/namedColorsCSS.csv";
 
-  async function fetchData(url) {
-    const response = await fetch(url);
-    return await response.text();
-  }
+  const message = (data) => {
+    let message = "";
+    message = message + Math.round(csvFormat(data).length / 1024) + "kB\n";
+    message = message + data.length + " rows\n";
+    message = message + data.columns.length + " colomns";
+    return message;
+  };
 
-  fetchData(csvURL).then((text) => {
-    console.log(csvParse(text));
+  useEffect(() => {
+    csv(csvURL).then(setData);
   });
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {/*pre-formatted: will show as in code*/}
+      <pre>{data ? message(data) : "Loading..."}</pre>
+    </>
   );
 }
