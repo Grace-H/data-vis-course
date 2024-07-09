@@ -1,30 +1,40 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
-import { csv, csvFormat } from "d3";
+import { csv, arc } from "d3";
+
+const csvURL =
+  "https://gist.githubusercontent.com/Grace-H/6fa383b8274ae4de60bd9a2638455854/raw/namedColorsCSS.csv";
+
+const width = 960;
+const height = 500;
+const centerX = width / 2;
+const centerY = height / 2;
+
+const pieArc = arc().innerRadius(0).outerRadius(200);
 
 export default function App() {
   const [data, setData] = useState(null);
 
-  const csvURL =
-    "https://gist.githubusercontent.com/Grace-H/6fa383b8274ae4de60bd9a2638455854/raw/namedColorsCSS.csv";
-
-  const message = (data) => {
-    let message = "";
-    message = message + Math.round(csvFormat(data).length / 1024) + "kB\n";
-    message = message + data.length + " rows\n";
-    message = message + data.columns.length + " colomns";
-    return message;
-  };
-
   useEffect(() => {
     csv(csvURL).then(setData);
-  });
+  }, []);
 
+  if (!data) {
+    return <pre>Loading...</pre>;
+  }
   return (
-    <>
-      {/*pre-formatted: will show as in code*/}
-      <pre>{data ? message(data) : "Loading..."}</pre>
-    </>
+    <svg width={width} height={height}>
+      <g transform={`translate(${centerX},${centerY})`}>
+        {data.map((d, i) => (
+          <path
+            d={pieArc({
+              startAngle: (i / data.length) * 2 * Math.PI,
+              endAngle: ((i + 1) / data.length) * 2 * Math.PI,
+            })}
+            fill={d["RGB hex value"]}
+          />
+        ))}
+      </g>
+    </svg>
   );
 }
